@@ -1,11 +1,11 @@
-﻿<div style="border: 1px solid black; padding: 3px; padding:3px; @BackgroundStyle" @attributes="UserAttributes" >
+﻿<div style="@BackgroundStyle" @attributes="UserAttributes" class="card">
     <h6>@Book?.Title</h6>
     <p>Author: @Book?.AuthorName</p>
     <p>Publishing Date: @Book?.PublishingDate</p>
 
     @if (WithButton)
     {
-        <button style="width: 100%; @ButtonStyle" @onclick="AddToCart">Add to Cart</button>
+        <button class="main-button" @onclick="AddToCart">Add to Cart</button>
     }
 </div>
 
