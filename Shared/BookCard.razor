@@ -1,0 +1,39 @@
+﻿<div style="border: 1px solid black; padding: 3px; padding:3px; @BackgroundStyle" @attributes="UserAttributes" >
+    <h6>@Book?.Title</h6>
+    <p>Author: @Book?.AuthorName</p>
+    <p>Publishing Date: @Book?.PublishingDate</p>
+
+    @if (WithButton)
+    {
+        <button style="width: 100%; @ButtonStyle" @onclick="AddToCart">Add to Cart</button>
+    }
+</div>
+
+@code{
+    [Parameter]
+    [EditorRequired] // This attribute makes the Parameter required
+    public Book? Book { get; set; }
+
+    [Parameter]
+    public bool WithButton { get; set; } = true;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? UserAttributes { get; set; }
+
+    [Parameter]
+    public EventCallback<Book?> OnAddToCartClicked { get; set; }
+
+    [CascadingParameter(Name = "BackgroundStyle")]
+    public string? BackgroundStyle { get; set; }
+
+    [CascadingParameter(Name = "ButtonStyle")]
+    public string? ButtonStyle { get; set; }
+
+    [CascadingParameter]
+    public bool IsBusy { get; set; }
+
+    private void AddToCart()
+    {
+        OnAddToCartClicked.InvokeAsync(Book);
+    }
+}
