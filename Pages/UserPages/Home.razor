@@ -23,12 +23,17 @@ Welcome to your new app.
 <hr />
 
 <h3 class="mt-3">My Cart: </h3>
-<ul>
+<DataListView TItemType="Book" Items="_books" ColumnCount="4">
+    <ItemTemplate>
+        <BookCard Book="@context" OnAddToCartClicked="AddToCart" WithButton="true" />
+    </ItemTemplate>
+</DataListView>
+@* <ul>
     @foreach (var book in _booksCart)
     {
         <li>@book.Title</li>
     }
-</ul>
+</ul> *@
 
 
 <p>Api Url: @Configuration["ApiUrl"]</p>
@@ -39,10 +44,26 @@ Welcome to your new app.
 }
 
 
+<ModalPopup Title="Hi" IsOpen="@_IsWelcomeModalOpen" OnCloseClicked="() => _IsWelcomeModalOpen = false">
+    <ChildContent>
+        <p>Welcome to our Books Store. Here you will find a huge
+           collection of books to help you build your career input
+           software development. Enjoy!
+        </p>
+    </ChildContent>
+    <FooterContent>
+        <button class="btn btn-primary" @onclick="() => _IsWelcomeModalOpen = false">Discover It!</button>
+    </FooterContent>
+</ModalPopup>
+
+
+
 
 @code{
     private List<Book> _books = new List<Book>();
     private List<Book> _booksCart = new List<Book>();
+
+    private bool _IsWelcomeModalOpen = true;
 
     protected override async Task OnInitializedAsync()
     {

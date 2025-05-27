@@ -1,2 +1,34 @@
-﻿body {
+﻿.overlay{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-box{
+    width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+}
+
+.modal-box .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 20px;
+}
+
+.modal-box .modal-header .close-button{
+    color: red;
+    cursor: pointer;
+}
+
+.modal-box .modal-body, .modal-footer{
+    padding: 5px 20px;
 }
