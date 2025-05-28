@@ -3,8 +3,11 @@
 @inject IConfiguration Configuration
 @inject IBooksService BooksService
 @inject IWebAssemblyHostEnvironment Host
+@inject NavigationManager Navigation
+@implements IDisposable
 
 <PageTitle>Home</PageTitle>
+@layout UserLayout
 
 <h1>Welcome to the BooksStore</h1>
 
@@ -59,6 +62,7 @@
     protected override async Task OnInitializedAsync()
     {
         _books = await BooksService.GetAllBooksAsync();
+        Navigation.LocationChanged += Navigation_LocationChanged;
     }
 
     private void AddToCart(Book selectedBook)
@@ -67,10 +71,22 @@
         StateHasChanged();
     }
 
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= Navigation_LocationChanged;
+    }
+
     private Book _firstBook = new Book
     {
         Title = "Mastering Blazor WebAssembly",
         AuthorName = "John Smith",
         PublishingDate = new DateTime(2022,08,01)
     };
+
+    private void Navigation_LocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        Console.WriteLine($"The location changed to {e.Location}");
+    }
+
+    
 }
