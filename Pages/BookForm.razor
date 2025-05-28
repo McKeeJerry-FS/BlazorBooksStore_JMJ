@@ -1,4 +1,6 @@
 ﻿@page "/book/Form"
+@using BlazorBooksStore.Blazor.Components
+
 <PageTitle>BooksStore | Add a New Book</PageTitle>
 
 
@@ -18,7 +20,8 @@
             <div class="form-group mt-1">
                 <label>Description</label>
                 @* <input type="text" @bind-value="@_book.Description" class="form-control" placeholder="Description" /> *@
-                <InputTextArea @bind-Value="@_book.Description" class="form-control" />
+                @* <InputTextArea @bind-Value="@_book.Description" class="form-control" /> *@
+                <BlazorSimpleMDE @ref="_simpleMde" />
                 <ValidationMessage For="@(() => _book.Description)" />
             </div>
             <div class="form-group mt-1">
@@ -65,8 +68,14 @@
     private SubmitBook _book = new();
     private TimeOnly _time = new TimeOnly(12, 30, 0);
     private BookFormat _bookFormat = BookFormat.Paperback;
-    private void HandleBookFormSubmission()
+
+    private BlazorSimpleMDE? _simpleMde;
+    private async void HandleBookFormSubmission()
     {
+        if (_simpleMde != null)
+        {
+            _book.Description = await _simpleMde.GetEditorValueAsync();
+        }
         Console.WriteLine("Book has been successfully submitted");
         Console.WriteLine($"Title: {_book.Title}");
         Console.WriteLine($"Author: {_book.Author}");
