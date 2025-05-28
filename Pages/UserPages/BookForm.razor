@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-6>">
         <h2>Add a New Book</h2>
-        <EditForm Model="_book">
+        <EditForm Model="_book" OnSubmit="HandleBookFormSubmission">
             <div class="form-group mt-1">
                 <label>Title</label>
                 <input type="text" @bind-value="@_book.Title" class="form-control" placeholder="Title" />
@@ -36,4 +36,12 @@
 
 @code {
     private SubmitBook _book = new();
+
+    private void HandleBookFormSubmission()
+    {
+        Console.WriteLine("Book has been successfully submitted");
+        Console.WriteLine($"Title: {_book.Title}");
+        Console.WriteLine($"Author: {_book.Author}");
+        Console.WriteLine($"Price : ${_book.Price}");
+    }
 }
