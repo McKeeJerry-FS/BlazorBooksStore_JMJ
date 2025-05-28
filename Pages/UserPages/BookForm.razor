@@ -4,31 +4,58 @@
 
 
 <div class="row">
-    <div class="col-6>">
+    <div class="col-6">
         <h2>Add a New Book</h2>
-        <EditForm Model="_book" OnSubmit="HandleBookFormSubmission">
+        <EditForm Model="_book" OnValidSubmit="HandleBookFormSubmission">
+            <DataAnnotationsValidator />
+            @* <ValidationSummary /> *@
             <div class="form-group mt-1">
                 <label>Title</label>
-                <input type="text" @bind-value="@_book.Title" class="form-control" placeholder="Title" />
+                @* <input type="text" @bind-value="@_book.Title" class="form-control" placeholder="Title" /> *@
+                <InputText @bind-Value="@_book.Title" class="form-control" />
+                <ValidationMessage For="@(() => _book.Title)" />
             </div>
             <div class="form-group mt-1">
                 <label>Description</label>
-                <input type="text" @bind-value="@_book.Description" class="form-control" placeholder="Description" />
+                @* <input type="text" @bind-value="@_book.Description" class="form-control" placeholder="Description" /> *@
+                <InputTextArea @bind-Value="@_book.Description" class="form-control" />
+                <ValidationMessage For="@(() => _book.Description)" />
             </div>
             <div class="form-group mt-1">
                 <label>Number of Pages</label>
-                <input type="number" @bind-value="@_book.PagesCount" class="form-control" placeholder="Number of pages" />
+                @* <input type="number" @bind-value="@_book.PagesCount" class="form-control" placeholder="Number of pages" /> *@
+                <InputNumber @bind-Value="@_book.PagesCount" class="form-control" />
+                <ValidationMessage For="@(() => _book.PagesCount)" />
             </div>
             <div class="form-group mt-1">
                 <label>Author</label>
-                <input type="text" @bind-value="@_book.Author" class="form-control" placeholder="Author" />
+                @* <input type="text" @bind-value="@_book.Author" class="form-control" placeholder="Author" /> *@
+                <InputText @bind-Value="@_book.Author" class="form-control" />
+                <ValidationMessage For="@(() => _book.Author)" />
             </div>
             <div class="form-group mt-1">
                 <label>Price</label>
-                <input type="number" @bind-value="@_book.Price" class="form-control" placeholder="Price" />
+                @* <input type="number" @bind-value="@_book.Price" class="form-control" placeholder="Price" /> *@
+                <InputNumber TValue="decimal" @bind-Value="@_book.Price" class="form-control" />
+                <ValidationMessage For="@(() => _book.Price)" />
             </div>
+            
+            <hr />
+            <div class="form-group mt-1">
+                <BlazorBooksStore.Blazor.Components.InputTime @bind-Value="_time" class="form-control" />
+                <p>Selected time is @_time</p>
+            </div>
+            @* <div class="form-group mt-1">
+                <label>Format:</label>
+                <InputRadioGroup TValue="BookFormat" @bind-Value="_book.Format" class="form-control">
+                    <InputRadio TValue="BookFormat" Value="BookFormat.Paperback" /> Paperback
+                    <InputRadio TValue="BookFormat" Value="BookFormat.Hardcover" /> Hardcover
+                    <InputRadio TValue="BookFormat" Value="BookFormat.EBook" /> EBook
+                </InputRadioGroup>
+            </div> *@
             <div class="form-group mt-1">
                 <input type="submit" class="btn btn-success" value="Save" />
+                <input type="reset" class="btn btn-secondary" value="Reset" />
             </div>
         </EditForm>
     </div>
@@ -36,7 +63,8 @@
 
 @code {
     private SubmitBook _book = new();
-
+    private TimeOnly _time = new TimeOnly(12, 30, 0);
+    private BookFormat _bookFormat = BookFormat.Paperback;
     private void HandleBookFormSubmission()
     {
         Console.WriteLine("Book has been successfully submitted");
