@@ -31,5 +31,11 @@ namespace BlazorBooksStore.Services
         {
             return Task.FromResult(_allBooks);
         }
+
+        public Task<Book?> GetBookByIdAsync(string? id)
+        {
+            var book = _allBooks.SingleOrDefault(b => b.Id == id);
+            return Task.FromResult(book);
+        }
     }
 }
