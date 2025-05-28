@@ -1,5 +1,8 @@
 ﻿@page "/book/Form"
 @using BlazorBooksStore.Blazor.Components
+@using Blazored.LocalStorage
+@inject ILocalStorageService LocalStorage
+@implements IDisposable
 
 <PageTitle>BooksStore | Add a New Book</PageTitle>
 
@@ -68,8 +71,15 @@
     private SubmitBook _book = new();
     private TimeOnly _time = new TimeOnly(12, 30, 0);
     private BookFormat _bookFormat = BookFormat.Paperback;
+    private System.Timers.Timer _timer = new();
 
     private BlazorSimpleMDE? _simpleMde;
+
+    protected async override Task OnInitializedAsync(){
+        SetupTimer();
+        await CheckSavedStateAsync();
+    }
+
     private async void HandleBookFormSubmission()
     {
         if (_simpleMde != null)
@@ -80,5 +90,37 @@
         Console.WriteLine($"Title: {_book.Title}");
         Console.WriteLine($"Author: {_book.Author}");
         Console.WriteLine($"Price : ${_book.Price}");
+
+        await ClearSavedStateAsync();
     }
+
+    private async Task SaveFormStateAsync() {
+        _book.Description = await _simpleMde.GetEditorValueAsync();
+        await LocalStorage.SetItemAsync("book", _book);
+    }
+
+    private async Task CheckSavedStateAsync() {
+        if(await LocalStorage.ContainKeyAsync("book")){
+            _book = await LocalStorage.GetItemAsync<SubmitBook>("book") ?? new SubmitBook();
+        }
+    }
+
+    private async Task ClearSavedStateAsync () {
+        await LocalStorage.RemoveItemAsync("book");
+    }
+
+    private void SetupTimer() {
+        var second = 1000;
+        _timer.Interval = 10 * second;
+        _timer.Elapsed += async (sender, e) => {
+            await SaveFormStateAsync();
+        };
+        _timer.Start();
+    }
+    
+    public void Dispose(){
+        _timer.Stop();
+        _timer.Dispose();
+    }
+
 }

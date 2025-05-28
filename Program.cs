@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using BlazorBooksStore.Services.Interfaces;
 using BlazorBooksStore.Services;
 using BlazorBooksStore;
+using Blazored.LocalStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -13,5 +14,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 // Register for new services
 builder.Services.AddScoped<ILoggingService, ConsoleLoggingService>();
 builder.Services.AddScoped<IBooksService, LocalBooksService>();
+
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync();
