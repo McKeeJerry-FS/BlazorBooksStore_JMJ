@@ -6,11 +6,7 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<BookCard Book="_firstBook" WithButton="false" class="mt-3"/>
+<h1>Welcome to the BooksStore</h1>
 
 <h3>Available Books: </h3>
 <div style="display:flex;">
@@ -25,18 +21,13 @@ Welcome to your new app.
 <h3 class="mt-3">My Cart: </h3>
 <DataListView TItemType="Book" Items="_books" ColumnCount="4">
     <ItemTemplate>
-        <BookCard Book="@context" OnAddToCartClicked="AddToCart" WithButton="true" />
+        <BookCard Book="@context" OnAddToCartClicked="AddToCart" WithButton="false" />
     </ItemTemplate>
 </DataListView>
-@* <ul>
-    @foreach (var book in _booksCart)
-    {
-        <li>@book.Title</li>
-    }
-</ul> *@
 
 
-<p>Api Url: @Configuration["ApiUrl"]</p>
+
+@* <p>Api Url: @Configuration["ApiUrl"]</p> *@
 
 @if (!Host.IsDevelopment())
 {
