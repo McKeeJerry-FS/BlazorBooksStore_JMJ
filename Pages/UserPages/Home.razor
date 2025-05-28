@@ -4,6 +4,7 @@
 @inject IBooksService BooksService
 @inject IWebAssemblyHostEnvironment Host
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
 @implements IDisposable
 
 <PageTitle>Home</PageTitle>
@@ -63,6 +64,9 @@
     {
         _books = await BooksService.GetAllBooksAsync();
         Navigation.LocationChanged += Navigation_LocationChanged;
+
+        var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/scripts.js");
+        var randomBook = await module.InvokeAsync<Book>("getRandomBook");
     }
 
     private void AddToCart(Book selectedBook)
