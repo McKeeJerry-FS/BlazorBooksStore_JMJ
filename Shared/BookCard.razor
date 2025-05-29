@@ -7,7 +7,7 @@
 
     @if (WithButton)
     {
-        <button class="main-button" @onclick="AddToCart">Add to Cart</button>
+        <button class="main-button" @onclick="AddToCart" @onclick:stopPropagation>Add to Cart</button>
     }
 </div>
 
@@ -34,14 +34,14 @@
     [CascadingParameter]
     public bool IsBusy { get; set; }
 
-    private void AddToCart()
+    private async Task AddToCart()
     {
-        OnAddToCartClicked.InvokeAsync(Book);
+        await OnAddToCartClicked.InvokeAsync(Book);
     }
 
     private void NavigateToBookDetails()
     {
-        var url = $"/book/{Book.Id}";
+        var url = $"/book/{Book?.Id}";
         Navigation.NavigateTo(url);
     }
 }
