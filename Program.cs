@@ -17,4 +17,6 @@ builder.Services.AddScoped<IBooksService, LocalBooksService>();
 
 builder.Services.AddBlazoredLocalStorage();
 
+builder.Services.AddSingleton<AppStateContainer>();
+
 await builder.Build().RunAsync();
