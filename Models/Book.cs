@@ -1,27 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using BlazorBooksStore.Models.Enums;
 
 namespace BlazorBooksStore.Models
 {
     public class Book
     {
-        
+        [JsonPropertyName("title")]
         public string? Title { get; set; }
 
-        
+        [JsonPropertyName("authorName")]
         public string? AuthorName { get; set; } = string.Empty;
+        [JsonPropertyName("publishingDate")]
         public DateTime PublishingDate { get; set; }
 
-        
+        [JsonPropertyName("price")]
         public decimal Price { get; set; }
 
-        
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
+        [JsonPropertyName("id")]
         public string? Id { get; set; }
 
-        
+        [JsonPropertyName("pagesCount")]
         public int PagesCount { get; set; }
 
+        [JsonPropertyName("coverImageUrl")]
+        public string? CoverImageUrl { get; set; }
+
+
+    
         public BookFormat Format { get; set; }
     }
 }
