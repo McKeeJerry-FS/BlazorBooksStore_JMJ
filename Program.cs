@@ -11,17 +11,20 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+// Register for new services
+builder.Services.AddScoped<ILoggingService, ConsoleLoggingService>();
+builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped<DemoLoggingHandler>();
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["ApiUrl"]) });
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorBooksStore.Api"));
 
 builder.Services.AddHttpClient("BlazorBooksStore.Api", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ApiUrl"]);
-});
+})
+.AddHttpMessageHandler<DemoLoggingHandler>();
 
-// Register for new services
-builder.Services.AddScoped<ILoggingService, ConsoleLoggingService>();
-builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorBooksStore.Api"));
+
 
 builder.Services.AddBlazoredLocalStorage();
 
