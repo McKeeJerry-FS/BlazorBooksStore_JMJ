@@ -17,10 +17,10 @@ public class BooksService : IBooksService
 
   public async Task AddBookAsync(SubmitBook book)
   {
-    var response = _httpClient.PostAsJsonAsync("/books", book);
-    if (!response.IsCompletedSuccessfully)
+    var response = await _httpClient.PostAsJsonAsync("/books", book);
+    if (!response.IsSuccessStatusCode)
     {
-      var errorResponse = await response.Result.Content.ReadFromJsonAsync<ApiErrorResponse>();
+      var errorResponse = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
       Console.WriteLine(errorResponse?.Message ?? "Unknown error while adding book.");
     }
   }
