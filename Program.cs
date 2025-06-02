@@ -13,7 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 // Register for new services
 builder.Services.AddScoped<ILoggingService, ConsoleLoggingService>();
-builder.Services.AddScoped<IBooksService, LocalBooksService>();
+builder.Services.AddScoped<IBooksService, BooksService>();
 
 builder.Services.AddBlazoredLocalStorage();
 

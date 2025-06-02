@@ -47,9 +47,10 @@
 
 <ModalPopup Title="Hi" IsOpen="@_IsWelcomeModalOpen" OnCloseClicked="() => _IsWelcomeModalOpen = false">
     <ChildContent>
-        <p>Welcome to our Books Store. Here you will find a huge
-           collection of books to help you build your career input
-           software development. Enjoy!
+        <p>
+            Welcome to our Books Store. Here you will find a huge
+            collection of books to help you build your career input
+            software development. Enjoy!
         </p>
     </ChildContent>
     <FooterContent>
@@ -72,8 +73,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //_books = await BooksService.GetAllBooksAsync();
-        _books = await GetBooksAsync() ?? new List<Book>();
+        _books = await BooksService.GetAllBooksAsync();
+        //_books = await GetBooksAsync() ?? new List<Book>();
         Navigation.LocationChanged += Navigation_LocationChanged;
 
         var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/scripts.js");
@@ -116,7 +117,9 @@
         //TODO: Logic to fetch books by the new page number
     }
 
-    private async Task<List<Book>?> GetBooksAsync() {
+
+    @* This method is moved to a Service: BooksService.cs *@
+    @* private async Task<List<Book>?> GetBooksAsync() {
         var response = await HttpClient.GetAsync("/books");
         if (response.IsSuccessStatusCode)
         {
@@ -128,5 +131,5 @@
             throw new Exception($"Error fetching books: {errorResponse?.Message ?? "Unknown error"}");
             // TODO: Handle error appropriately
         }
-    }
+    } *@
 }
