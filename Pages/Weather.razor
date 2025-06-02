@@ -44,7 +44,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("/weatherforecast");
         if (forecasts == null)
         {
             LoggingService.Log("Failed to load weather data.");
@@ -56,7 +56,7 @@ else
 
     public class WeatherForecast
     {
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }
 
