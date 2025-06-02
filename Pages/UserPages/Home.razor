@@ -5,6 +5,7 @@
 @inject IWebAssemblyHostEnvironment Host
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
+@inject HttpClient HttpClient
 @implements IDisposable
 
 <PageTitle>Home | Page @PageNumber</PageTitle>
@@ -71,7 +72,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _books = await BooksService.GetAllBooksAsync();
+        //_books = await BooksService.GetAllBooksAsync();
+        _books = await GetBooksAsync() ?? new List<Book>();
         Navigation.LocationChanged += Navigation_LocationChanged;
 
         var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/scripts.js");
@@ -112,5 +114,19 @@
     {
         Navigation.NavigateTo($"/?pageNumber={pageNumber}");
         //TODO: Logic to fetch books by the new page number
+    }
+
+    private async Task<List<Book>?> GetBooksAsync() {
+        var response = await HttpClient.GetAsync("/books");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<List<Book>>();
+        }
+        else
+        {
+            var errorResponse = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            throw new Exception($"Error fetching books: {errorResponse?.Message ?? "Unknown error"}");
+            // TODO: Handle error appropriately
+        }
     }
 }
