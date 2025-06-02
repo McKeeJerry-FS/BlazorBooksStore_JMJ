@@ -9,7 +9,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["ApiUrl"]) });
+var apiUrl = builder.Configuration["ApiUrl"];
+if (string.IsNullOrWhiteSpace(apiUrl))
+{
+	throw new InvalidOperationException("ApiUrl configuration is missing or empty.");
+}
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiUrl) });
 
 // Register for new services
 builder.Services.AddScoped<ILoggingService, ConsoleLoggingService>();
