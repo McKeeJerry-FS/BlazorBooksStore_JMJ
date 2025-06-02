@@ -5,5 +5,6 @@ namespace BlazorBooksStore.Services.Interfaces
     {
         Task<List<Book>>? GetAllBooksAsync();
         Task<Book?> GetBookByIdAsync(string? id);
+        Task AddBookAsync(SubmitBook book);
     }
 }

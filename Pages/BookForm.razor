@@ -4,6 +4,7 @@
 @inject ILocalStorageService LocalStorage
 @inject HttpClient Http
 @inject NavigationManager Navigation
+@inject BooksService BooksService
 @implements IDisposable
 
 <PageTitle>BooksStore | Add a New Book</PageTitle>
@@ -88,19 +89,9 @@
         {
             _book.Description = await _simpleMde.GetEditorValueAsync();
         }
-        var response = await Http.PostAsJsonAsync("/books", _book);
-        if (response.IsSuccessStatusCode)
-        {
-            await ClearSavedStateAsync();
-            Navigation.NavigateTo("/book/List");
-        }
-        else
-        {
-            // Handle error response
-            var errorMessage = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-            Console.WriteLine($"Error: {errorMessage}");
-            // TODO: Handle the error
-        }
+        await BooksService.AddBookAsync(_book);
+        await ClearSavedStateAsync();
+        Navigation.NavigateTo("/");
 
     }
 
