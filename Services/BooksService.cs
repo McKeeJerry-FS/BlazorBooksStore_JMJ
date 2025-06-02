@@ -8,6 +8,7 @@ namespace BlazorBooksStore.Services;
 public class BooksService : IBooksService
 {
   private readonly HttpClient _httpClient;
+  private List<Book> _allBooks = new List<Book>(); // In-memory list to store books
 
   public BooksService(HttpClient httpClient)
   {
@@ -20,7 +21,8 @@ public class BooksService : IBooksService
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Successfully fetched books from API.");
-            return await response.Content.ReadFromJsonAsync<List<Book>?>();
+            _allBooks = await response.Content.ReadFromJsonAsync<List<Book>?>() ?? new List<Book>();
+            return _allBooks;
         }
         else
         {
@@ -32,6 +34,7 @@ public class BooksService : IBooksService
 
   public Task<Book?> GetBookByIdAsync(string? id)
   {
-    throw new NotImplementedException();
+        var book = _allBooks.FirstOrDefault(b => b.Id == id);
+        return Task.FromResult(book);
   }
 }

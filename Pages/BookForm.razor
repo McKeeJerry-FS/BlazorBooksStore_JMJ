@@ -2,6 +2,8 @@
 @using BlazorBooksStore.Blazor.Components
 @using Blazored.LocalStorage
 @inject ILocalStorageService LocalStorage
+@inject HttpClient Http
+@inject NavigationManager Navigation
 @implements IDisposable
 
 <PageTitle>BooksStore | Add a New Book</PageTitle>
@@ -86,12 +88,20 @@
         {
             _book.Description = await _simpleMde.GetEditorValueAsync();
         }
-        Console.WriteLine("Book has been successfully submitted");
-        Console.WriteLine($"Title: {_book.Title}");
-        Console.WriteLine($"Author: {_book.Author}");
-        Console.WriteLine($"Price : ${_book.Price}");
+        var response = await Http.PostAsJsonAsync("/books", _book);
+        if (response.IsSuccessStatusCode)
+        {
+            await ClearSavedStateAsync();
+            Navigation.NavigateTo("/book/List");
+        }
+        else
+        {
+            // Handle error response
+            var errorMessage = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            Console.WriteLine($"Error: {errorMessage}");
+            // TODO: Handle the error
+        }
 
-        await ClearSavedStateAsync();
     }
 
     private async Task SaveFormStateAsync() {
