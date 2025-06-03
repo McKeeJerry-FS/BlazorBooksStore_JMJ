@@ -129,18 +129,5 @@
     }
 
 
-    @* This method is moved to a Service: BooksService.cs *@
-    @* private async Task<List<Book>?> GetBooksAsync() {
-        var response = await HttpClient.GetAsync("/books");
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadFromJsonAsync<List<Book>>();
-        }
-        else
-        {
-            var errorResponse = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-            throw new Exception($"Error fetching books: {errorResponse?.Message ?? "Unknown error"}");
-            // TODO: Handle error appropriately
-        }
-    } *@
+    
 }

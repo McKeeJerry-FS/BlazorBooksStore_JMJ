@@ -2,6 +2,7 @@
 @using Blazored.LocalStorage
 @inject ILocalStorageService LocalStorage
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
 
 <AuthorizeView>
     <Authorized>
@@ -22,5 +23,7 @@
     {
         await LocalStorage.RemoveItemAsync("access_token");
         await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        Navigation.NavigateTo("/"); // Redirect to home page after logout
+        StateHasChanged(); // Refresh the component to reflect the logout state
     }
 }

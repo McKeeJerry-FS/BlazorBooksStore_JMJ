@@ -36,6 +36,11 @@ builder.Services.AddAuthorizationCore(options =>
 });
 builder.Services.AddScoped<AuthenticationStateProvider, JwtCustomAuthenticationStateProvider>();
 
+builder.Services.AddScoped<AuthorizationMessageHandler>();
+builder.Services.AddHttpClient("BlazorBooksStore.ServerApi", client => client.BaseAddress = new Uri(builder.Configuration["ApiUrl"]))
+    .AddHttpMessageHandler<AuthorizationMessageHandler>();
+
+
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<AppStateContainer>();
