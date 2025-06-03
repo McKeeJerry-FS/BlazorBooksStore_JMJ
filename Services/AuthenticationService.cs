@@ -1,4 +1,5 @@
-﻿using BlazorBooksStore.Models;
+﻿using BlazorBooksStore.Exceptions;
+using BlazorBooksStore.Models;
 using BlazorBooksStore.Services.Interfaces;
 using System.Net.Http.Json;
 
@@ -7,10 +8,12 @@ namespace BlazorBooksStore.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<AuthenticationService> _logger;
 
-        public AuthenticationService(HttpClient httpClient)
+        public AuthenticationService(HttpClient httpClient, ILogger<AuthenticationService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task<LoginResponse> LoginUserAsync(LoginRequest requestModel)
@@ -20,12 +23,16 @@ namespace BlazorBooksStore.Services
             {
                 return await response.Content.ReadFromJsonAsync<LoginResponse>();
             }
-            else
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-                Console.WriteLine(error);
-                throw new Exception(error?.Message);
-                // TODO: Handle error more gracefully, e.g., show a notification to the user
+                throw new ApiResponseException(error);
+            }
+            else
+            {
+                var content = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+                _logger.LogError($"Failed to log the user in. Status Code: {response.StatusCode}", content);
+                throw new Exception("Oops!! Something must've gone wrong");
             }
         }
     }
