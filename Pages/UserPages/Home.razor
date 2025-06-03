@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@using Blazored.LocalStorage
 @inject IConfiguration Configuration
 @inject IBooksService BooksService
 @inject IWebAssemblyHostEnvironment Host
@@ -67,6 +68,9 @@
 
     private bool _IsWelcomeModalOpen = true;
 
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationState { get; set; }
+
     [Parameter]
     [SupplyParameterFromQuery(Name = "pageNumber")]
     public int PageNumber { get; set; } = 1;
@@ -79,7 +83,14 @@
 
         var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "/scripts.js");
         var randomBook = await module.InvokeAsync<Book>("getRandomBook");
+        var authState = await AuthenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            //Execute logic if the user is authenticated
+        }
     }
+
+   
 
     protected override void OnParametersSet()
     {

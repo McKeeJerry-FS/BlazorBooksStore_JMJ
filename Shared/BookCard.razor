@@ -7,7 +7,14 @@
 
     @if (WithButton)
     {
-        <button class="main-button" @onclick="AddToCart" @onclick:stopPropagation>Add to Cart</button>
+        <AuthorizeView>
+            <Authorized>
+                <button class="main-button" @onclick="AddToCart" @onclick:stopPropagation>Add to Cart</button>
+            </Authorized>
+            <NotAuthorized>
+                <p class="text-center">Books only for sale in the UK at this time...</p>
+            </NotAuthorized>
+        </AuthorizeView>
     }
 </div>
 
