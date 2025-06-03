@@ -7,6 +7,8 @@
 @inject IBooksService BooksService
 @implements IDisposable
 
+@attribute [Authorize(Roles = "Admin")]
+
 <PageTitle>BooksStore | Add a New Book</PageTitle>
 
 

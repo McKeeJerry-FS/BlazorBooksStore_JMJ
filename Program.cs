@@ -6,6 +6,7 @@ using BlazorBooksStore.Services;
 using BlazorBooksStore;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -27,7 +28,12 @@ builder.Services.AddHttpClient("BlazorBooksStore.Api", client =>
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlazorBooksStore.Api"));
 
-builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("UK_Customer", policy => {
+        policy.RequireRole(ClaimTypes.Country, "UK");
+    });
+});
 builder.Services.AddScoped<AuthenticationStateProvider, JwtCustomAuthenticationStateProvider>();
 
 builder.Services.AddBlazoredLocalStorage();
