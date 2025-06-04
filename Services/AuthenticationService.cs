@@ -8,17 +8,16 @@ namespace BlazorBooksStore.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<AuthenticationService> _logger;
+        
 
-        public AuthenticationService(HttpClient httpClient, ILogger<AuthenticationService> logger)
+        public AuthenticationService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _logger = logger;
         }
 
         public async Task<LoginResponse> LoginUserAsync(LoginRequest requestModel)
         {
-            var response = await _httpClient.PostAsJsonAsync<LoginRequest>("authentication/login", requestModel);
+            var response = await _httpClient.PostAsJsonAsync("authentication/login", requestModel);
             if (response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadFromJsonAsync<LoginResponse>();
@@ -31,7 +30,6 @@ namespace BlazorBooksStore.Services
             else
             {
                 var content = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-                _logger.LogError($"Failed to log the user in. Status Code: {response.StatusCode}", content);
                 throw new Exception("Oops!! Something must've gone wrong");
             }
         }
