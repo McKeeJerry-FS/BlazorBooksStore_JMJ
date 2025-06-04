@@ -16,18 +16,18 @@
             <div class="mb-3">
                 <label>Username</label>
                 <InputText @bind-Value="_model.Username" 
-                           class="form-control" 
-                           placeholder="Username" 
-                           />
+                    class="form-control" 
+                    placeholder="Username" 
+                />
                 <ValidationMessage For="@(() => _model.Username)" />
             </div>
             <div class="mb-3">
                 <label>Password</label>
                 <InputText @bind-Value="_model.Password" 
-                           type="password" 
-                           class="form-control" 
-                           placeholder="Password" 
-                           />
+                    type="password" 
+                    class="form-control" 
+                    placeholder="Password" 
+                />
                 <ValidationMessage For="@(() => _model.Password)" />
             </div>
             <button type="submit" class="btn btn-primary">
