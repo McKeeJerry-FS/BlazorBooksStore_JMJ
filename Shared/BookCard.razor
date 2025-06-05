@@ -19,6 +19,10 @@
 </div>
 
 @code{
+    private string _oldBookId = string.Empty;
+    private bool _shouldRerender = false;
+
+
     [Parameter]
     [EditorRequired] // This attribute makes the Parameter required
     public Book? Book { get; set; }
@@ -50,5 +54,23 @@
     {
         var url = $"/book/{Book?.Id}";
         Navigation.NavigateTo(url);
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Book == null) throw new ArgumentNullException(nameof(Book));
+        if(Book.Id.Equals(_oldBookId)){
+            _oldBookId = Book.Id;
+            _shouldRerender = true;
+        }
+        else
+        {
+            _shouldRerender = false;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine($"BookCard rendered for Book: {Book?.Title}");
     }
 }
