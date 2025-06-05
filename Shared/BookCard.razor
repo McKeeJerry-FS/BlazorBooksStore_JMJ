@@ -59,13 +59,19 @@
     protected override void OnParametersSet()
     {
         if (Book == null) throw new ArgumentNullException(nameof(Book));
-        if(Book.Id.Equals(_oldBookId)){
-            _oldBookId = Book.Id;
-            _shouldRerender = true;
+        
+        if(Book.Id != null){
+            if(Book.Id.Equals(_oldBookId)){
+                _oldBookId = Book.Id;
+                _shouldRerender = true;
+            }
+            else
+            {
+                _shouldRerender = false;
+            }
         }
-        else
-        {
-            _shouldRerender = false;
+        else {
+            throw new ArgumentException(nameof(Book.Id), "Book.Id cannot be null or empty.");
         }
     }
 
