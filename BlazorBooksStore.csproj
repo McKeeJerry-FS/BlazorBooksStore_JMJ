@@ -19,4 +19,8 @@
     <ProjectReference Include="..\BlazorBooksStore.Blazor.Components\BlazorBooksStore.Blazor.Components.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="BooksStore.Blazor.Components.dll" />
+  </ItemGroup>
+
 </Project>
